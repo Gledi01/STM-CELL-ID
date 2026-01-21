@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STM-CELL ID | Premium Digital Hub v2.5</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00d2ff;
+            --secondary: #9d50bb;
+            --bg-dark: #06090f;
+            --card-glass: rgba(16, 20, 30, 0.8);
+            --border-glass: rgba(255, 255, 255, 0.1);
+            --success: #00f2fe;
+            --dana-blue: #118eea;
+        }
+
+        /* --- Global Styles --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: var(--bg-dark); color: #fff; overflow-x: hidden; scroll-behavior: smooth; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #06090f; }
+        ::-webkit-scrollbar-thumb { background: var(--secondary); border-radius: 10px; }
+
+        /* --- Animations --- */
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        /* --- Navigation --- */
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 8%; background: rgba(6, 9, 15, 0.95);
+            backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 1000;
+            border-bottom: 1px solid var(--border-glass);
+        }
+        .logo-area { display: flex; align-items: center; gap: 10px; }
+        .logo-icon { width: 40px; height: 40px; background: linear-gradient(45deg, var(--primary), var(--secondary)); border-radius: 10px; display: grid; place-items: center; font-weight: 800; }
+        .nav-links { display: flex; gap: 25px; list-style: none; align-items: center; }
+        .nav-links a { color: #aaa; text-decoration: none; font-size: 0.9rem; transition: 0.3s; }
+        .nav-links a:hover { color: var(--primary); }
+
+        /* --- Hero Section --- */
+        .hero { padding: 60px 8% 20px; text-align: center; background: radial-gradient(circle at top, rgba(157, 80, 187, 0.15), transparent); }
+        .hero h1 { font-size: 3rem; margin-bottom: 10px; font-weight: 800; background: linear-gradient(to right, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .status-badge { background: rgba(0, 210, 255, 0.1); color: var(--primary); padding: 5px 15px; border-radius: 20px; font-size: 0.7rem; border: 1px solid var(--primary); margin-bottom: 15px; display: inline-block; }
+
+        /* --- Banner Menu --- */
+        .banner-menu {
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            gap: 15px; padding: 25px 8%; background: rgba(17, 24, 39, 0.5);
+        }
+        .menu-btn {
+            background: var(--card-glass); border: 1px solid var(--border-glass);
+            border-radius: 20px; padding: 20px 10px; text-align: center; cursor: pointer; transition: 0.3s;
+        }
+        .menu-btn:hover, .menu-btn.active { border-color: var(--primary); transform: translateY(-5px); background: rgba(0, 210, 255, 0.1); }
+        .menu-btn i { font-size: 1.5rem; margin-bottom: 8px; display: block; color: var(--primary); }
+        .menu-btn span { font-size: 0.75rem; font-weight: 600; color: #ccc; }
+
+        /* --- Main Layout --- */
+        .main-container { padding: 20px 8% 80px; display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
+
+        /* --- Catalog & Products --- */
+        .cat-section { margin-bottom: 40px; }
+        .section-title { margin-bottom: 20px; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; color: var(--primary); font-weight: 800; }
+        .catalog-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        @media (min-width: 600px) { .catalog-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (min-width: 1200px) { .catalog-grid { grid-template-columns: repeat(4, 1fr); } }
+
+        .item-card {
+            background: var(--card-glass); border: 1px solid var(--border-glass);
+            padding: 15px; border-radius: 15px; cursor: pointer; transition: 0.3s; text-align: center;
+        }
+        .item-card:hover, .item-card.active { border-color: var(--primary); background: rgba(0, 210, 255, 0.1); transform: scale(1.03); }
+        .item-card b { display: block; font-size: 0.85rem; margin-bottom: 5px; }
+        .item-card span { font-size: 0.75rem; color: var(--primary); font-weight: 700; }
+        .hidden-item { display: none; }
+        .btn-more { width: 100%; padding: 12px; background: transparent; border: 1px dashed #444; color: #888; border-radius: 10px; cursor: pointer; margin-top: 15px; font-size: 0.8rem; }
+
+        /* --- Payments --- */
+        .payment-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 20px; }
+        .pay-card {
+            background: #111827; border: 1px solid var(--border-glass);
+            padding: 12px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: 0.3s;
+        }
+        .pay-card:hover, .pay-card.active { border-color: #22c55e; background: rgba(34, 197, 94, 0.05); }
+        .pay-card img { height: 18px; width: 45px; object-fit: contain; }
+        .pay-card span { font-size: 0.75rem; font-weight: 600; }
+
+        /* --- Sidebar Checkout --- */
+        .sidebar { position: sticky; top: 100px; height: fit-content; }
+        .checkout-box { background: #0b0f14; border: 1px solid var(--primary); border-radius: 25px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; font-size: 0.75rem; color: #888; margin-bottom: 8px; }
+        .input-group input { width: 100%; background: #06090f; border: 1px solid var(--border-glass); padding: 12px; color: #fff; border-radius: 10px; outline: none; transition: 0.3s; }
+        .input-group input:focus { border-color: var(--primary); }
+        .price-tag { font-size: 1.8rem; font-weight: 800; color: var(--primary); margin: 15px 0; display: block; }
+        .btn-buy { width: 100%; padding: 18px; border: none; border-radius: 12px; background: linear-gradient(45deg, var(--primary), var(--secondary)); color: #fff; font-weight: 800; cursor: pointer; transition: 0.3s; }
+        .btn-buy:hover { filter: brightness(1.2); transform: scale(1.02); }
+
+        /* --- Notifications & Modals --- */
+        #notification-area { position: fixed; bottom: 20px; left: 20px; z-index: 9999; }
+        .toast {
+            background: var(--card-glass); border-left: 4px solid var(--primary);
+            padding: 15px 25px; border-radius: 10px; display: flex; align-items: center;
+            gap: 15px; animation: slideIn 0.5s ease-out; margin-top: 10px; backdrop-filter: blur(10px);
+        }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; place-items: center; z-index: 2000; }
+        .receipt-card { background: #fff; color: #333; width: 90%; max-width: 360px; border-radius: 20px; overflow: hidden; animation: slideUp 0.4s ease; }
+        .receipt-head { background: var(--dana-blue); color: #fff; padding: 30px; text-align: center; }
+        .receipt-body { padding: 20px; }
+        .receipt-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.85rem; }
+
+        /* --- Admin UI --- */
+        .admin-overlay { position: fixed; inset: 0; background: var(--bg-dark); z-index: 10000; padding: 40px; display: none; overflow-y: auto; }
+        .admin-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 30px; }
+        .stat-card { background: var(--card-glass); padding: 20px; border-radius: 15px; border: 1px solid var(--border-glass); text-align: center; }
+
+        @media (max-width: 900px) { 
+            .main-container { grid-template-columns: 1fr; } 
+            .banner-menu { grid-template-columns: repeat(2, 1fr); padding: 15px 5%; }
+            .hero h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="notification-area"></div>
+
+    <nav>
+        <div class="logo-area">
+            <div class="logo-icon">S</div>
+            <div>
+                <div style="font-weight: 800;">STM-CELL <span style="color:var(--primary)">ID</span></div>
+                <div style="font-size: 0.6rem; color: #555;">PREMIUM HUB v2.5</div>
+            </div>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#" onclick="location.reload()"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="#"><i class="fas fa-history"></i> Riwayat</a></li>
+            <li><a href="javascript:void(0)" onclick="openAdmin()"><i class="fas fa-user-shield"></i> Admin</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero">
+        <div class="status-badge"><i class="fas fa-circle" style="font-size: 8px;"></i> System Online: 24/7 Automated</div>
+        <h1>Layanan Digital Terpercaya</h1>
+        <p style="color: #666; max-width: 600px; margin: 0 auto; font-size: 0.9rem;">Top Up Game, Pulsa, dan E-Wallet otomatis dalam hitungan detik.</p>
+    </section>
+
+    <div class="banner-menu">
+        <div class="menu-btn" onclick="filterCat('pulsa', this)">
+            <i class="fas fa-sim-card"></i>
+            <span>Pulsa & Data</span>
+        </div>
+        <div class="menu-btn" onclick="filterCat('ml', this)">
+            <i class="fas fa-gamepad"></i>
+            <span>Mobile Legends</span>
+        </div>
+        <div class="menu-btn" onclick="filterCat('ff', this)">
+            <i class="fas fa-fire"></i>
+            <span>Free Fire</span>
+        </div>
+        <div class="menu-btn" onclick="filterCat('voucher', this)">
+            <i class="fas fa-ticket-alt"></i>
+            <span>Voucher Belanja</span>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div id="catalog-content">
+            <div class="cat-section" id="sec-pulsa">
+                <div class="section-title"><i class="fas fa-mobile-alt"></i> Pulsa Reguler All Operator</div>
+                <div class="catalog-grid" id="grid-pulsa"></div>
+                <button class="btn-more" id="btn-pulsa" onclick="expand('pulsa')">Lihat Selengkapnya (15 Produk)</button>
+            </div>
+
+            <div class="cat-section" id="sec-ml">
+                <div class="section-title"><i class="fas fa-gamepad"></i> Mobile Legends: Bang Bang</div>
+                <div class="catalog-grid" id="grid-ml"></div>
+            </div>
+
+            <div class="cat-section" id="sec-ff">
+                <div class="section-title"><i class="fas fa-fire"></i> Free Fire Diamonds</div>
+                <div class="catalog-grid" id="grid-ff"></div>
+            </div>
+
+            <div class="cat-section">
+                <div class="section-title"><i class="fas fa-wallet"></i> Metode Pembayaran</div>
+                <div class="payment-grid">
+                    <div class="pay-card" onclick="selectPay('DANA', this)"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Logo_dana_blue.svg/1200px-Logo_dana_blue.svg.png"><span>DANA</span></div>
+                    <div class="pay-card" onclick="selectPay('QRIS', this)"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Logo_QRIS.svg/1200px-Logo_QRIS.svg.png"><span>QRIS</span></div>
+                    <div class="pay-card" onclick="selectPay('BCA', this)"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Bank_Central_Asia.svg/2560px-Bank_Central_Asia.svg.png"><span>BCA</span></div>
+                    <div class="pay-card" onclick="selectPay('GOPAY', this)"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Gopay_logo.svg/2560px-Gopay_logo.svg.png"><span>GOPAY</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <div class="checkout-box">
+                <h3 style="margin-bottom: 20px;"><i class="fas fa-shopping-cart"></i> Detail Pesanan</h3>
+                <div class="input-group">
+                    <label id="label-id">Nomor HP / ID Tujuan</label>
+                    <input type="text" id="target-id" placeholder="Masukkan Nomor/ID">
+                </div>
+                <div class="input-group" id="zone-input" style="display:none">
+                    <label>Zone ID</label>
+                    <input type="text" id="zone-id" placeholder="1234">
+                </div>
+                <div class="input-group">
+                    <label>Produk Terpilih</label>
+                    <input type="text" id="view-prod" readonly style="color:var(--primary); font-weight:bold" placeholder="Pilih produk di katalog">
+                </div>
+                <div class="input-group">
+                    <label>Metode Pembayaran</label>
+                    <input type="text" id="view-pay" readonly placeholder="Pilih metode di bawah">
+                </div>
+                <span class="price-tag" id="view-price">Rp 0</span>
+                <button class="btn-buy" id="btn-main-pay" onclick="processPayment()">BAYAR SEKARANG</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modalResi">
+        <div class="receipt-card">
+            <div class="receipt-head">
+                <i class="fas fa-check-circle" style="font-size: 3.5rem; margin-bottom: 10px;"></i>
+                <h2 style="letter-spacing: 1px;">TRANSAKSI BERHASIL</h2>
+                <p style="font-size: 0.75rem; opacity: 0.8;">ID: STM-<span id="res-id"></span></p>
+            </div>
+            <div class="receipt-body">
+                <div class="receipt-row"><span>Status</span><b style="color: #22c55e;">SUCCESS</b></div>
+                <div class="receipt-row"><span>Produk</span><b id="res-prod"></b></div>
+                <div class="receipt-row"><span>No. Tujuan</span><span id="res-target"></span></div>
+                <div class="receipt-row"><span>Metode</span><span id="res-pay"></span></div>
+                <div style="border-top: 1px dashed #ccc; margin: 15px 0;"></div>
+                <div class="receipt-row"><b style="font-size: 1.1rem;">Total Bayar</b><b id="res-price" style="color: var(--dana-blue); font-size: 1.2rem;"></b></div>
+                <button class="btn-buy" onclick="location.reload()" style="background: var(--dana-blue); margin-top: 10px;">SELESAI</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="admin-panel" class="admin-overlay">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h1><i class="fas fa-user-shield"></i> Dashboard Admin</h1>
+            <button class="btn-buy" style="width: auto; padding: 10px 30px;" onclick="closeAdmin()">Tutup</button>
+        </div>
+        <div class="admin-stats">
+            <div class="stat-card"><h4>Omzet Hari Ini</h4><p style="color:var(--primary); font-size: 1.5rem;">Rp 4.250.000</p></div>
+            <div class="stat-card"><h4>Pesanan Sukses</h4><p style="color:var(--success); font-size: 1.5rem;">128</p></div>
+            <div class="stat-card"><h4>Antrean</h4><p style="color:orange; font-size: 1.5rem;">3</p></div>
+        </div>
+        <div class="checkout-box" style="margin-top: 30px; background: #0b0e14;">
+            <h3>Log Transaksi Real-time</h3>
+            <div id="admin-logs" style="margin-top: 20px; max-height: 300px; overflow-y: auto; font-size: 0.8rem;">
+                <div style="padding: 10px; border-bottom: 1px solid #222;">[10:21:04] Sukses: Lazada 50rb - 0812*** - Rp 52.000</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA CONFIG ---
+        // Menghasilkan 16 katalog untuk setiap brand voucher
+        const generateVouchers = (brand, basePrice) => {
+            return Array.from({length: 16}, (_, i) => {
+                const nominal = (i + 1) * 10000;
+                return { 
+                    n: `${brand} Rp ${nominal.toLocaleString('id-ID')}`, 
+                    p: nominal + 2000, 
+                    c: 'voucher' 
+                };
+            });
+        };
+
+        const products = {
+            pulsa: Array.from({length: 15}, (_, i) => ({ n: `Pulsa ${[5,10,15,20,25,30,40,50,60,75,100,150,200,300,500][i]}rb`, p: [5,10,15,20,25,30,40,50,60,75,100,150,200,300,500][i]*1000 + 1500, c: 'pulsa' })),
+            ml: Array.from({length: 12}, (_, i) => ({ n: `${(i+1)*50} Diamonds`, p: (i+1)*16500, c: 'game' })),
+            ff: Array.from({length: 12}, (_, i) => ({ n: `${(i+1)*70} Diamonds`, p: (i+1)*12500, c: 'game' })),
+            
+            // Kategori Voucher Gabungan (Akan dirender semua saat klik menu Voucher)
+            voucher: [
+                ...generateVouchers("Lazada", 10000),
+                ...generateVouchers("Tokopedia", 10000),
+                ...generateVouchers("Shopee", 10000),
+                ...generateVouchers("Blibli", 10000),
+                ...generateVouchers("Netflix", 50000),
+                ...generateVouchers("Playstore", 20000)
+            ]
+        };
+
+        const fakeUsers = ["Andi", "Siska", "Budi", "Rizky", "Dewi", "Fajar"];
+
+        // --- CORE FUNCTIONS ---
+        function renderGrid(id, items, hideMore) {
+            const grid = document.getElementById(id);
+            if(!grid) return;
+            grid.innerHTML = '';
+            items.forEach((item, idx) => {
+                const card = document.createElement('div');
+                card.className = `item-card ${idx >= 8 && hideMore ? 'hidden-item' : ''}`;
+                card.innerHTML = `<b>${item.n}</b><span>Rp ${item.p.toLocaleString()}</span>`;
+                card.onclick = () => {
+                    document.querySelectorAll('.item-card').forEach(c => c.classList.remove('active'));
+                    card.classList.add('active');
+                    document.getElementById('view-prod').value = item.n;
+                    document.getElementById('view-price').innerText = "Rp " + item.p.toLocaleString();
+                    document.getElementById('zone-input').style.display = item.c === 'game' ? 'block' : 'none';
+                    document.getElementById('label-id').innerText = item.c === 'game' ? 'User ID Game' : 'Nomor HP Tujuan';
+                    window.scrollTo({top: 100, behavior: 'smooth'});
+                };
+                grid.appendChild(card);
+            });
+        }
+
+        function filterCat(type, el) {
+            document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+            document.querySelectorAll('.cat-section').forEach(s => s.style.display = 'none');
+            
+            let filterSection = document.getElementById('filter-section');
+            if(!filterSection) {
+                filterSection = document.createElement('div');
+                filterSection.id = 'filter-section';
+                filterSection.className = 'cat-section';
+                document.getElementById('catalog-content').prepend(filterSection);
+            }
+            filterSection.style.display = 'block';
+            
+            // Judul dinamis
+            const title = type === 'voucher' ? 'Semua Voucher Belanja & Streaming' : `Hasil Kategori: ${type.toUpperCase()}`;
+            filterSection.innerHTML = `<div class="section-title"><i class="fas fa-bolt"></i> ${title}</div><div class="catalog-grid" id="grid-filter"></div>`;
+            
+            renderGrid('grid-filter', products[type], false);
+            window.scrollTo({top: 400, behavior: 'smooth'});
+        }
+
+        function selectPay(name, el) {
+            document.querySelectorAll('.pay-card').forEach(p => p.classList.remove('active'));
+            el.classList.add('active');
+            document.getElementById('view-pay').value = name;
+        }
+
+        function processPayment() {
+            const id = document.getElementById('target-id').value;
+            const prod = document.getElementById('view-prod').value;
+            const pay = document.getElementById('view-pay').value;
+            const btn = document.getElementById('btn-main-pay');
+
+            if(!id || !prod || !pay) return alert("Mohon lengkapi ID, Pilih Produk, dan Metode Pembayaran!");
+
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> MEMPROSES...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                const transId = Math.floor(Math.random() * 900000) + 100000;
+                document.getElementById('res-id').innerText = transId;
+                document.getElementById('res-prod').innerText = prod;
+                document.getElementById('res-target').innerText = id;
+                document.getElementById('res-pay').innerText = pay;
+                document.getElementById('res-price').innerText = document.getElementById('view-price').innerText;
+                document.getElementById('modalResi').style.display = 'grid';
+
+                // Log to Admin
+                const log = document.getElementById('admin-logs');
+                const time = new Date().toLocaleTimeString();
+                log.innerHTML = `<div style="padding: 10px; border-bottom: 1px solid #222; color: var(--primary)">[${time}] NEW: ${prod} - ${id} (${pay})</div>` + log.innerHTML;
+            }, 2000);
+        }
+
+        // --- SOCIAL PROOF NOTIF ---
+        function showNotification() {
+            const area = document.getElementById('notification-area');
+            const user = fakeUsers[Math.floor(Math.random()*fakeUsers.length)];
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `<i class="fas fa-check-circle" style="color:var(--success)"></i><div><small>${user} baru saja beli</small><br><b>Produk Berhasil Dikirim!</b></div>`;
+            area.appendChild(toast);
+            setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 500); }, 3000);
+        }
+
+        // --- ADMIN FUNCTIONS ---
+        function openAdmin() {
+            const pass = prompt("Masukkan PIN Admin:");
+            if(pass === "1234") document.getElementById('admin-panel').style.display = 'block';
+            else alert("Akses Ditolak!");
+        }
+        function closeAdmin() { document.getElementById('admin-panel').style.display = 'none'; }
+        function expand(type) { renderGrid('grid-pulsa', products.pulsa, false); document.getElementById('btn-pulsa').style.display = 'none'; }
+
+        // --- INIT ---
+        window.onload = () => {
+            renderGrid('grid-pulsa', products.pulsa, true);
+            renderGrid('grid-ml', products.ml, false);
+            renderGrid('grid-ff', products.ff, false);
+            setInterval(showNotification, 7000);
+        };
+    </script>
+</body>
+</html>
